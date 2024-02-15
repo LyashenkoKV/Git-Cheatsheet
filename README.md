@@ -1,4 +1,4 @@
-# Шпаргалка
+                                        # Шпаргалка
 ----
 # Терминал
 ----
@@ -270,7 +270,7 @@ Date:   Tue Mar 28 00:26:53 2023 +0300
 > Для этого он откроет текстовый редактор, который установлен в системе по умолчанию. 
 > Чаще всего это либо GNU nano, либо Vim.
 
-## Vim
+## __Vim__
 > Выйти из редактора Vim
 1. Нажмите клавишу `Esc`;
 2. Наберите последовательность символов `:qa!`;
@@ -278,5 +278,49 @@ Date:   Tue Mar 28 00:26:53 2023 +0300
 
 > Для запуска учебника на русском языке достаточно выполнить команду `vimtutor ru`
 
+# __Откатить изменения__
+## __Выполнить unstage изменений__
+> Допустим, вы создали или изменили какой-то файл и добавили его в список «на коммит» (staging area) 
+> с помощью `git add`, но потом передумали включать его туда.
+* `git restore --staged <file>` - Убрать файл из `staging`
+```
+`touch example.txt` # создали ненужный файл
+`git add example.txt` # добавили его в staged
 
+`git status` # проверили статус
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   example.txt
+
+`git restore` --staged example.txt
+`git status` # проверили статус
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        example.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+# файл example.txt из staged вернулся обратно в untracked 
+```
+> Вызов `git restore --staged example.txt` перевёл `example.txt` из `staged` обратно в `untracked`.
+> Чтобы «сбросить» все файлы из `staged` обратно в `untracked/modified`, 
+> можно воспользоваться командой `git restore --staged .`: она сбросит всю текущую папку (`.`).
+
+## __ Откатить коммит__
+* `git reset --hard <commit hash>` - «откатить» то, что уже было закоммичено, вернуть состояние репозитория к более раннему.
+```
+`git log --oneline` # хеш можно найти в истории
+7b972f5 (HEAD -> master) style: добавить комментарии, расставить отступы
+b576d89 feat: добавить массив Expenses и цикл для добавления трат # вот сюда и вернёмся
+4b58962 refactor: разделить analyzeExpenses() на countSum() и saveExpenses()
+
+`git reset --hard b576d89`
+# теперь мы на этом коммите
+HEAD is now at b576d89 feat: добавить массив Expenses и цикл для добавления трат
+```
+
+## __«Откатить» изменения, которые не попали ни в staging, ни в коммит__
+> Если вы случайно изменили файл, который не планировали. Теперь он отображается в `Changes not staged for commit` (`modified`) 
+* `git restore <file>` - вернуть всё «как было»
+> Изменения в файле «откатятся» до последней версии, которая была сохранена через `git commit` или `git add`.
 
