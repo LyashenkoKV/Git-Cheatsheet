@@ -18,11 +18,15 @@
 * `touch index.html` - создай файл `index.html` в текущей папке;
 * `touch index.html style.css script.js` - если нужно создать сразу несколько файлов,
 можно напечатать их имена в одну строку через пробел;
-* `mkdir second-project` - создай папку с именем `second-project` в текущей папке.
+* `mkdir second-project` - создай папку с именем `second-project` в текущей папке;
+* `mkdir -p Git/dev/first-project` - создать вложенность папок.
 
 #### *Копирование и перемещение*
 * `cp file.txt ~/my-dir` - скопируй файл в другое место;
 * `mv file.txt ~/my-dir` - перемести файл или папку в другое место;
+
+#### *Изменение*
+* `mv hello-world.txt HelloWorld.txt` - переименовать `hello-world.txt` в `HelloWorld.txt`.
 
 #### *Чтение*
 * `cat file.txt` - распечатай содержимое текстового файла `file.txt`
@@ -31,6 +35,10 @@
 * `rm about.html` - удали файл `about.html`;
 * `rmdir images` - удали папку `images`;
 * `rm -r second-project` - удали папку `second-project` и все, что она содержит;
+
+#### *Добавление содержимого файлов*
+* `echo "Hello, World!" >> HelloWotld.txt` - перенаправления вывода — `>>`. Этот символ перемещает всё, что выводиться в командную строку, внутрь файла;
+* `pwd >> current_dir.txt` - запишет текущую директорию в файл `current_dir.txt`.
 
 ### __Полезные возможности__
 * Команды необязательно печатать и выполнять по очереди. 
@@ -278,6 +286,11 @@ Date:   Tue Mar 28 00:26:53 2023 +0300
 > Для запуска учебника на русском языке достаточно выполнить команду `vimtutor ru`
 
 # __Откатить изменения__
+
+* Команда 'git restore --staged <file>' переведёт файл из 'staged' обратно в 'modified' или 'untracked'.
+* Команда 'git reset --hard <commit hash>' «откатит» историю до коммита с хешем '<hash>'. Более поздние коммиты потеряются!
+* Команда 'git restore <file>' «откатит» изменения в файле до последней сохранённой (в коммите или в staging) версии.
+
 ## __Выполнить unstage изменений__
 > Допустим, вы создали или изменили какой-то файл и добавили его в список «на коммит» (staging area) 
 > с помощью `git add`, но потом передумали включать его туда.
@@ -322,4 +335,22 @@ HEAD is now at b576d89 feat: добавить массив Expenses и цикл 
 > Если вы случайно изменили файл, который не планировали. Теперь он отображается в `Changes not staged for commit` (`modified`) 
 * `git restore <file>` - вернуть всё «как было»
 > Изменения в файле «откатятся» до последней версии, которая была сохранена через `git commit` или `git add`.
+
+# __Просматриваем изменения в файлах__
+### __Встроенный инструмент сравнения__
+* 'git diff' - эта команда сравнит последнюю закоммиченную версию файла с текущей(измененнной - 'modified') версией
+
+### __Просматриваем изменения в staging area__
+* `git diff --staged` - просмотреть изменения в 'staged'-файлах относительно последних закоммиченных версий.
+
+### Внешний инструмент сравнения (например, P4Merge)
+> Настройка Git для использования P4Merge
+```
+git config --global merge.tool p4merge
+git config --global mergetool.p4merge.cmd 'p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"'
+git config --global diff.tool p4merge
+git config --global difftool.p4merge.cmd 'p4merge "$LOCAL" "$REMOTE"'
+```
+* `git difftool` - запустит P4Merge
+* `git mergetool` - для разрешения конфликтов слияния
 
